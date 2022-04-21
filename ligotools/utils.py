@@ -16,6 +16,7 @@ def whiten(strain, interp_psd, dt):
     white_ht = np.fft.irfft(white_hf, n=Nt)
     return white_ht
 
+
 # function to keep the data within integer limits, and write to wavfile:
 def write_wavfile(filename,fs,data):
     d = np.int16(data/np.max(np.abs(data)) * 32767 * 0.9)
