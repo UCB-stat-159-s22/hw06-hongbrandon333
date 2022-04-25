@@ -2,7 +2,8 @@
 clean :
     rm -f figurs/*.png
     rm -f audio/*.wav
-    rm -f build/html
+    rm -rf _build/*
+ 
 
 .PHONY : env
 env:
