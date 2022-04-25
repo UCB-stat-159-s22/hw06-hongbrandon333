@@ -1,5 +1,5 @@
-import ligotools.readligo as rl
-import ligotools.utils as utils
+from ligotools import readligo as rl
+from ligotools import utils as utils
 import numpy as np
 from ligotools import readligo as rl
 from scipy.interpolate import interp1d
