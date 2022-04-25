@@ -1,8 +1,8 @@
-from ligotools import readligo as rl
+import ligotools.readligo as rl
 import numpy as np
 
 
-strain_H1, time_H1, chan_dict_H1 = rl.loaddata('data/H-H1_LOSC_4_V2-1126259446-32.hdf5', 'H1')
+strain_H1, time_H1, chan_dict_H1 = rl.loaddata("data/H-H1_LOSC_4_V2-1126259446-32.hdf5", 'H1')
 strain_L1, time_L1, chan_dict_L1 = rl.loaddata('data/L-L1_LOSC_4_V2-1126259446-32.hdf5', 'L1')
     
         
@@ -14,7 +14,7 @@ def test_loadH1_strain_data():
         print('The strain data loaded from the H1 dataset is incorrect')
         quit()
         
-def test_loadH1_time_data()
+def test_loadH1_time_data():
     try:
         assert np.isclose(time_H1[0], 1126259446.0)
         assert time_H1.shape == (131072, )
