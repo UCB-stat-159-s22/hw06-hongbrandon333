@@ -8,7 +8,7 @@ clean :
 .PHONY : env
 env:
 	mamba env create -f environment.yml --name ligo
-	conda activate ligo
+	bash -ic 'conda activate ligo'
 	bash -ic 'conda activate ligo;python -m ipykernel install --user --name ligo --display-name "IPython -ligo"'
 
 .PHONY : html
