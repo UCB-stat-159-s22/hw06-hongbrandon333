@@ -38,7 +38,7 @@ def test_reqshift():
     assert strain_L1_shifted.shape == (131072,)
 
 def test_plot_functions():
-    util.plot_functions(1, 1126259462.432373, 0.04321032, pcolor = 'g', eventname = 'GW150914', det = 'H1', plottype = 'png', tevent = 1126259462.44, strain_whitenbp = 0, template_match = 0, template_fft = 1,datafreq = 1, d_eff = 999.743130306333, freqs = 1, data_psd = 1, fs = 4096)
+    utils.plot_functions(1, 1126259462.432373, 0.04321032, pcolor = 'g', eventname = 'GW150914', det = 'H1', plottype = 'png', tevent = 1126259462.44, strain_whitenbp = 0, template_match = 0, template_fft = 1,datafreq = 1, d_eff = 999.743130306333, freqs = 1, data_psd = 1, fs = 4096)
     assert exists('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
     remove('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
             
