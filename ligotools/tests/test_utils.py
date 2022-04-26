@@ -1,6 +1,7 @@
 import ligotools as ligo
 from ligotools import readligo as rl
 from ligotools import utils as utils 
+matplotlib.use('Agg')
 import numpy as np
 import matplotlib.mlab as mlab
 from ligotools import readligo as rl
@@ -44,11 +45,11 @@ def test_plot_functions():
     Pxx_H1, freqs = mlab.psd(strain_H1, Fs = fs, NFFT = NFFT)
     psd_H1 = interp1d(freqs, Pxx_H1)
     dt = time[1] - time[0]
-    strain_H1_whiten = utils.whiten(strain_H1,psd_H1,dt)
+    strain_H1_whiten = u.whiten(strain_H1,psd_H1,dt)
     bb, ab = butter(4, [fband[0]*2./fs, fband[1]*2./fs], btype='band')
     normalization = np.sqrt((fband[1]-fband[0])/(fs/2))
-    strain_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
-    timemax = 1126259462.432373
+    strain_H1_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
+    timemax = 1126259462.432373NOVL = NFFT/2
     utils.plot_functions(time, timemax, 0, 'g','GW150914', 'H1', 'png',1126259462.44, strain_whitenbp,  0, 0, 0 , 999.743130306333, 0, psd_H1, fs)
     assert exists('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
     remove('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
