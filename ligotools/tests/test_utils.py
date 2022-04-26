@@ -35,7 +35,7 @@ def test_reqshift():
     psd_L1 = interp1d(freqs, Pxx_L1)
     strain_L1_whiten = utils.whiten(strain_L1,psd_L1,dt)
     strain_L1_shifted = utils.reqshift(strain_L1_whiten,fshift=fshift,sample_rate=fs)
-    assert straing_L1_shifted.shape == (131072,)
+    assert strain_L1_shifted.shape == (131072,)
 
 def test_plot_functions():
     pass
