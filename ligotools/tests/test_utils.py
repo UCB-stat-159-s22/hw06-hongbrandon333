@@ -1,6 +1,7 @@
 import ligotools as ligo
 from ligotools import readligo as rl
 from ligotools import utils as utils 
+import matplotlib
 matplotlib.use('Agg')
 import numpy as np
 import matplotlib.mlab as mlab
@@ -47,7 +48,7 @@ def test_plot_functions():
     dt = time[1] - time[0]
     strain_H1_whiten = u.whiten(strain_H1,psd_H1,dt)
     bb, ab = butter(4, [fband[0]*2./fs, fband[1]*2./fs], btype='band')
-    normalization = np.sqrt((fband[1]-fband[0])/(fs/2))
+    normalization = np.sqrt((fband[s1]-fband[0])/(fs/2))
     strain_H1_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
     timemax = 1126259462.432373
     utils.plot_functions(time, timemax, 0, 'g','GW150914', 'H1', 'png',1126259462.44, strain_whitenbp,  0, 0, 0 , 999.743130306333, 0, psd_H1, fs)
