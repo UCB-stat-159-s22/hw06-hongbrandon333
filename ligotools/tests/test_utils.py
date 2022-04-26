@@ -17,9 +17,10 @@ def test_whiten():
     psd_H1 = interp1d(freqs, Pxx_H1)
     strain_H1_whiten = utils.whiten(strain_H1,psd_H1,dt)
     assert strain_H1_whiten.shape == (131072, )
-    assert strain_H1_whiten.shape == strain_H1
+    assert a.all(strain_H1_whiten.shape == strain_H1)
         
 def test_writewavefile(): 
+    data = np.linspace(0,10,16000)
     utils.write_wavfile("audio/temp.wav", fs, data)
     assert exists("audio/temp.wav")
     remove("audio/temp.wav")
@@ -27,6 +28,7 @@ def test_writewavefile():
 def test_reqshift():
     fshift = 400.
     speedup = 1.
+    dt = time_L1[1] - time_L1[0]
     fss = int(float(fs)*float(speedup))
     Pxx_L1, freqs = mlab.psd(strain_L1, Fs = fs, NFFT = NFFT)
     psd_L1 = interp1d(freqs, Pxx_L1)
