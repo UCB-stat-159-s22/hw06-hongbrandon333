@@ -5,11 +5,17 @@ import matplotlib
 matplotlib.use('Agg')
 import numpy as np
 import matplotlib.mlab as mlab
-from ligotools import readligo as rl
 from scipy.interpolate import interp1d
 from os.path import exists
 from os import remove
 from scipy.signal import butter, filtfilt
+from scipy import signal
+from scipy.io import wavfile
+from scipy.interpolate import interp1d
+from scipy.signal import butter, filtfilt, iirdesign, zpk2tf, freqz
+import h5py
+import matplotlib.pyplot as plt
+
 
 strain_H1, time_H1, chan_dict_H1 = rl.loaddata('data/H-H1_LOSC_4_V2-1126259446-32.hdf5', 'H1')
 strain_L1, time_L1, chan_dict_L1 = rl.loaddata('data/L-L1_LOSC_4_V2-1126259446-32.hdf5', 'L1')
@@ -46,7 +52,7 @@ def test_plot_functions():
     Pxx_H1, freqs = mlab.psd(strain_H1, Fs = fs, NFFT = NFFT)
     psd_H1 = interp1d(freqs, Pxx_H1)
     dt = time[1] - time[0]
-    strain_H1_whiten = u.whiten(strain_H1,psd_H1,dt)
+    strain_H1_whiten = utils.whiten(strain_H1,psd_H1,dt)
     bb, ab = butter(4, [fband[0]*2./fs, fband[1]*2./fs], btype='band')
     normalization = np.sqrt((fband[s1]-fband[0])/(fs/2))
     strain_H1_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
