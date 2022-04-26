@@ -47,7 +47,7 @@ def test_plot_functions():
     strain_H1_whiten = utils.whiten(strain_H1,psd_H1,dt)
     bb, ab = butter(4, [fband[0]*2./fs, fband[1]*2./fs], btype='band')
     normalization = np.sqrt((fband[1]-fband[0])/(fs/2))
-    strain_H1_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
+    strain_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
     timemax = 1126259462.432373
     utils.plot_functions(time, timemax, 0, 'g','GW150914', 'H1', 'png',1126259462.44, strain_whitenbp,  0, 0, 0 , 999.743130306333, 0, psd_H1, fs)
     assert exists('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
