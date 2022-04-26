@@ -7,6 +7,7 @@ from ligotools import readligo as rl
 from scipy.interpolate import interp1d
 from os.path import exists
 from os import remove
+from scipy.signal import butter, filtfilt
 
 strain_H1, time_H1, chan_dict_H1 = rl.loaddata('data/H-H1_LOSC_4_V2-1126259446-32.hdf5', 'H1')
 strain_L1, time_L1, chan_dict_L1 = rl.loaddata('data/L-L1_LOSC_4_V2-1126259446-32.hdf5', 'L1')
@@ -38,7 +39,17 @@ def test_reqshift():
     assert strain_L1_shifted.shape == (131072,)
 
 def test_plot_functions():
-    utils.plot_functions(1, 1126259462.432373, 0.04321032, pcolor = 'g', eventname = 'GW150914', det = 'H1', plottype = 'png', tevent = 1126259462.44, strain_whitenbp = 0, template_match = 0, template_fft = 1,datafreq = 1, d_eff = 999.743130306333, freqs = 1, data_psd = 1, fs = 4096)
+    fband = [43.0, 300.0]
+    time = time_H1
+    Pxx_H1, freqs = mlab.psd(strain_H1, Fs = fs, NFFT = NFFT)
+    psd_H1 = interp1d(freqs, Pxx_H1)
+    dt = time[1] - time[0]
+    strain_H1_whiten = u.whiten(strain_H1,psd_H1,dt)
+    bb, ab = butter(4, [fband[0]*2./fs, fband[1]*2./fs], btype='band')
+    normalization = np.sqrt((fband[1]-fband[0])/(fs/2))
+    strain_H1_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
+    timemax = 1126259462.432373
+    utils.plot_functions(time, timemax, 0, 'g', eventname = 'GW150914', 'H1', 'png', tevent = 1126259462.44, strain_whitenbp, template_match = 0, template_fft = 0, 0 , d_eff = 999.743130306333, freqs = 0, psd_H1, fs)
     assert exists('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
     remove('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
             
