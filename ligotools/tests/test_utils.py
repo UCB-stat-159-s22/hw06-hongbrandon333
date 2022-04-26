@@ -38,7 +38,46 @@ def test_reqshift():
     assert strain_L1_shifted.shape == (131072,)
 
 def test_plot_functions():
-    pass
+    NFFT = 4*fs
+    psd_window = np.blackman(NFFT)
+    NOVL = NFFT/2
+    template = (template_p + template_c*1.j) 
+    etime = time+template_offset
+    datafreq = np.fft.fftfreq(template.size)*fs
+    df = np.abs(datafreq[1] - datafreq[0])
+    try:   
+        dwindow = signal.tukey(template.size, alpha=1./8)  # Tukey window preferred, but requires recent scipy 
+    except:
+        dwindow = signal.blackman(template.size)          # Blackman window OK if Tukey is not available
+    template_fft = np.fft.fft(template*dwindow) / fs
+    data = strain_L1.copy()
+    data_psd, freqs = mlab.psd(data, Fs = fs, NFFT = NFFT, window=psd_window, noverlap=NOVL)
+    data_fft = np.fft.fft(data*dwindow) / fs
+    power_vec = np.interp(np.abs(datafreq), freqs, data_psd)
+    optimal = data_fft * template_fft.conjugate() / power_vec
+    optimal_time = 2*np.fft.ifft(optimal)*fs
+    sigmasq = 1*(template_fft * template_fft.conjugate() / power_vec).sum() * df
+    sigma = np.sqrt(np.abs(sigmasq))
+    SNR_complex = optimal_time/sigma
+    peaksample = int(data.size / 2)  # location of peak in the template
+    SNR_complex = np.roll(SNR_complex,peaksample)
+    SNR = abs(SNR_complex)
+    indmax = np.argmax(SNR)
+    timemax = time[indmax]
+    SNRmax = SNR[indmax]
+    d_eff = sigma / SNRmax
+    phase = np.angle(SNR_complex[indmax])
+    offset = (indmax-peaksample)
+    template_phaseshifted = np.real(template*np.exp(1j*phase))    
+    template_rolled = np.roll(template_phaseshifted,offset) / d_eff  
+    template_whitened = util.whiten(template_rolled,interp1d(freqs, data_psd),dt)  
+    template_match = filtfilt(bb, ab, template_whitened) / normalization 
+    pcolor='g'
+    strain_whitenbp = strain_L1_whitenbp
+    template_L1 = template_match.copy()
+    assert exists('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
+    remove('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
+            
     
     
 
