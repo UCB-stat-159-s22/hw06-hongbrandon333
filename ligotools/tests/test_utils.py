@@ -49,7 +49,7 @@ def test_plot_functions():
     normalization = np.sqrt((fband[1]-fband[0])/(fs/2))
     strain_H1_whitenbp = filtfilt(bb, ab, strain_H1_whiten) / normalization
     timemax = 1126259462.432373
-    utils.plot_functions(time, timemax, 0, 'g', eventname = 'GW150914', 'H1', 'png', tevent = 1126259462.44,           strain_whitenbp, template_match = 0, template_fft = 0, 0 , d_eff = 999.743130306333, freqs = 0, psd_H1, fs)
+    utils.plot_functions(time, timemax, 0, 'g','GW150914', 'H1', 'png',1126259462.44, strain_whitenbp,  0, 0, 0 , 999.743130306333, 0, psd_H1, fs)
     assert exists('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
     remove('figures/'+'GW150914'+"_"+"H1"+"_matchtime."+"png")
             
